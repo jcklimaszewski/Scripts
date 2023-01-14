@@ -51,7 +51,11 @@ public class respectTheGrind : MonoBehaviour
 
     public TMP_Text clickMultiText;
     public TMP_Text idleMultiText;
-
+    
+    // Initialize elements for multi-buy switcher/algorithms
+    public TMP_Text buyMultiText;
+    public int clickSwitch;
+    public bool buyMax;
     DateTime oldDate;
     DateTime currentDate;
 
@@ -163,6 +167,7 @@ public class respectTheGrind : MonoBehaviour
     }
 
     public void Update() {
+        // buyQtySwitcher();
         currentDate = System.DateTime.Now;
         minutes = currentDate.Minute - oldDate.Minute;
 
@@ -224,37 +229,37 @@ public class respectTheGrind : MonoBehaviour
             idleText.text = "$" + data.idlePower.ToString("F2") + " Credits/Sec";
         }
 
-        if (data.idleCost > 1000) {
-            var exponent = (Math.Floor(Math.Log10(Math.Abs(data.idleCost))));
-            var mantissa = (data.idleCost / Math.Pow(10, exponent));
-            idleUpgradeText.text = "+$" + Math.Round(data.idleUpgrade, 2) + " CPS\nCost: $" + mantissa.ToString("F2") + "e" + exponent; 
-        } else {
-            idleUpgradeText.text = "+$" + Math.Round(data.idleUpgrade, 2) + " CPS\nCost: $" + data.idleCost.ToString("F2"); 
-        }
-        if (data.clickCost > 1000) {
-            var exponent = (Math.Floor(Math.Log10(Math.Abs(data.clickCost))));
-            var mantissa = (data.clickCost / Math.Pow(10, exponent));
-            clickUpgradeText.text = "+$" + Math.Round(data.clickUpgrade, 2) + " Per Click\nCost: $" + mantissa.ToString("F2") + "e" + exponent; 
-        } else {
-            clickUpgradeText.text = "+$" + Math.Round(data.clickUpgrade, 2) + " Per Click\nCost: $" + data.clickCost.ToString("F2"); 
-        }
-        // Displays Income Multiplier Buttons
-        if (data.clickMultiCost > 1000) {
-            var exponent = (Math.Floor(Math.Log10(Math.Abs(data.clickMultiCost))));
-            var mantissa = (data.clickMultiCost / Math.Pow(10, exponent));
-            clickMultiText.text = "x" + Math.Round(data.clickMultiplier, 2) + " Clicker Rank " + data.clickMultiRank + "\n(" + data.clickMultiProgress + "/" + data.clickMultiRankUp + ")\nCost: $" + mantissa.ToString("F2") + "e" + exponent; 
-        } else {
-            clickMultiText.text = "x" + Math.Round(data.clickMultiplier, 2) + " Clicker Rank " + data.clickMultiRank + "\n(" + data.clickMultiProgress + "/" + data.clickMultiRankUp + ")\nCost: $" + data.clickMultiCost.ToString("F2"); 
-        }
-        if (data.idleMultiCost > 1000) {
-            var exponent = (Math.Floor(Math.Log10(Math.Abs(data.idleMultiCost))));
-            var mantissa = (data.idleMultiCost / Math.Pow(10, exponent));
-            idleMultiText.text = "x" + Math.Round(data.idleMultiplier, 2) + " Idle SPD Rank " + data.idleMultiRank + "\n(" + data.idleMultiProgress + "/" + data.idleMultiRankUp + ")\nCost: $" + mantissa.ToString("F2") + "e" + exponent; 
-        } else {
-            idleMultiText.text = "x" + Math.Round(data.idleMultiplier, 2) + " Idle SPD Rank " + data.idleMultiRank + "\n(" + data.idleMultiProgress + "/" + data.idleMultiRankUp + ")\nCost: $" + data.idleMultiCost.ToString("F2"); 
-        }
+        // Displays Income Upgrade Buttons
 
-
+            if (data.idleCost > 1000) {
+                var exponent = (Math.Floor(Math.Log10(Math.Abs(data.idleCost))));
+                var mantissa = (data.idleCost / Math.Pow(10, exponent));
+                idleUpgradeText.text = "+$" + Math.Round(data.idleUpgrade, 2) + " CPS\nCost: $" + mantissa.ToString("F2") + "e" + exponent; 
+            } else {
+                idleUpgradeText.text = "+$" + Math.Round(data.idleUpgrade, 2) + " CPS\nCost: $" + data.idleCost.ToString("F2"); 
+            }
+            if (data.clickCost > 1000) {
+                var exponent = (Math.Floor(Math.Log10(Math.Abs(data.clickCost))));
+                var mantissa = (data.clickCost / Math.Pow(10, exponent));
+                clickUpgradeText.text = "+$" + Math.Round(data.clickUpgrade, 2) + " Per Click\nCost: $" + mantissa.ToString("F2") + "e" + exponent; 
+            } else {
+                clickUpgradeText.text = "+$" + Math.Round(data.clickUpgrade, 2) + " Per Click\nCost: $" + data.clickCost.ToString("F2"); 
+            }
+            // Displays Income Multiplier Buttons
+            if (data.clickMultiCost > 1000) {
+                var exponent = (Math.Floor(Math.Log10(Math.Abs(data.clickMultiCost))));
+                var mantissa = (data.clickMultiCost / Math.Pow(10, exponent));
+                clickMultiText.text = "x" + Math.Round(data.clickMultiplier, 2) + " Clicker Rank " + data.clickMultiRank + "\n(" + data.clickMultiProgress + "/" + data.clickMultiRankUp + ")\nCost: $" + mantissa.ToString("F2") + "e" + exponent; 
+            } else {
+                clickMultiText.text = "x" + Math.Round(data.clickMultiplier, 2) + " Clicker Rank " + data.clickMultiRank + "\n(" + data.clickMultiProgress + "/" + data.clickMultiRankUp + ")\nCost: $" + data.clickMultiCost.ToString("F2"); 
+            }
+            if (data.idleMultiCost > 1000) {
+                var exponent = (Math.Floor(Math.Log10(Math.Abs(data.idleMultiCost))));
+                var mantissa = (data.idleMultiCost / Math.Pow(10, exponent));
+                idleMultiText.text = "x" + Math.Round(data.idleMultiplier, 2) + " Idle SPD Rank " + data.idleMultiRank + "\n(" + data.idleMultiProgress + "/" + data.idleMultiRankUp + ")\nCost: $" + mantissa.ToString("F2") + "e" + exponent; 
+            } else {
+                idleMultiText.text = "x" + Math.Round(data.idleMultiplier, 2) + " Idle SPD Rank " + data.idleMultiRank + "\n(" + data.idleMultiProgress + "/" + data.idleMultiRankUp + ")\nCost: $" + data.idleMultiCost.ToString("F2"); 
+            }
 
         // Displays Module (Prestige) Info
         if (data.modsCost > 1000) {
@@ -275,8 +280,6 @@ public class respectTheGrind : MonoBehaviour
             data.modsToCollect ++;
             data.modsCost *= 5;
         }
-
-
 
         Save();
 
@@ -301,6 +304,24 @@ public class respectTheGrind : MonoBehaviour
             y.alpha = 0;
             y.interactable = false;
             y.blocksRaycasts = false;
+    }
+    //Initialize method for multiply button's text + algos
+    public void buyQtySwitcher()
+    {
+        clickSwitch++;
+        if(clickSwitch > 1)
+        {
+            clickSwitch = 0;
+        }
+        switch(clickSwitch)
+        {
+            case 0:
+            buyMultiText.text = "x1";
+            break;
+            case 1:
+            buyMultiText.text = "Max";
+            break;
+        }
     }
 
     public void switchMenu(string id) {
